@@ -1,0 +1,39 @@
+name: Validate Express App in Docker
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Pull Docker Image
+        run: |
+          docker pull mbedval/studentendpoint
+
+      - name: Run Docker Container
+        run: |
+          docker run -d --name express-app -p 3000:3000 mbedval/studentendpoint
+
+      - name: Wait for the app to start
+        run: |
+          sleep 10 # Wait for the app to start
+
+      - name: Run Jest Tests
+        run: |
+          docker run --rm --network host -v ${{ github.workspace }}:/app -w /app node:14 npm install
+          docker run --rm --network host -v ${{ github.workspace }}:/app -w /app node:14 npm test
+
+      - name: Stop and Remove Docker Container
+        run: |
+          docker stop express-app
+          docker rm express-app
