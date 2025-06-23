@@ -1,17 +1,33 @@
 // // __tests__/api.test.js
-// const api = require('../api');
+const api = require('../api');
+const request = require('supertest');
 
-// jest.mock('../api'); // Mock the entire module
+describe('Validate student get endpoint', () => {
+    const baseUrl = 'http://localhost:3000'; // URL of the running Docker container
 
-// test('mocking fetchData function', async () => {
-//   // Set the mock implementation
-//   api.fetchData.mockResolvedValue('mocked data');
+    it('should return a list of 10 students', async () => {
+        const response = await request(baseUrl).get('/api/students');
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toHaveLength(10);
+        expect(response.body).toEqual(expect.arrayContaining([
+            expect.objectContaining({ name: expect.any(String) })
+        ]));
+    });
+});
 
-//   const data = await api.fetchData();
+
+
+jest.mock('../api'); // Mock the entire module
+
+test('mocking fetchData function', async () => {
+  // Set the mock implementation
+  api.fetchData.mockResolvedValue('mocked data');
+
+  const data = await api.fetchData();
   
-//   expect(data).toBe('mocked data');
-//   expect(api.fetchData).toHaveBeenCalled();
-// });
+  expect(data).toBe('mocked data');
+  expect(api.fetchData).toHaveBeenCalled();
+});
 
 const myMock = jest.fn().mockImplementation(() => 'default value');
 
@@ -19,24 +35,6 @@ const myMock = jest.fn().mockImplementation(() => 'default value');
 test('mock implementation', () => {
   expect(myMock()).toBe('default value');
 });
-
-const axios = require('axios');
-
-
-test.skip ('should return the correct number of records', async () => {
-    const response = await axios.get('http://localhost:3000/posts');
-    
-    // Check if the response status is 200
-    expect(response.status).toBe(200);
-    
-    // Verify the number of records
-    const records = response.data; // Assuming the response data is an array
-    expect(Array.isArray(records)).toBe(true); // Check if it's an array
-    expect(records.length).toBeGreaterThan(0); // Check if there are records
-    console.log(`Number of records: ${records.length}`); // Log the number of records
-
-    console.log(records);
-  });
 
 
 

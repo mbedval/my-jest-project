@@ -10,7 +10,7 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "axios": "^1.10.0",
-    "jest": "^30.0.2"
+    "jest": "^30.0.2",
+    "supertest": "^7.1.1"
   }
 }
