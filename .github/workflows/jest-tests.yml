@@ -3,10 +3,10 @@ name: Validate Express App in Docker
 on:
   push:
     branches:
-      - main
+      - master
   pull_request:
     branches:
-      - main
+      - master
 
 jobs:
   test:
@@ -30,8 +30,8 @@ jobs:
 
       - name: Run Jest Tests
         run: |
-          docker run --rm --network host -v ${{ github.workspace }}:/app -w /app node:14 npm install
-          docker run --rm --network host -v ${{ github.workspace }}:/app -w /app node:14 npm test
+          docker run --rm --network host -v ${{ github.workspace }}:/app -w /app node:22 npm install
+          docker run --rm --network host -v ${{ github.workspace }}:/app -w /app node:22 npm test
 
       - name: Stop and Remove Docker Container
         run: |
